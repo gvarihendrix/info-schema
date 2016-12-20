@@ -4,6 +4,8 @@
   "description": "",
   "scripts": {
     "start": "nodemon server.js",
+    "start-win": "set PORT=9999 && set NODE_ENV=developement && nodemon server.js",
+    "start-unix": "PORT=9999 NODE_ENV=developement nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
