@@ -1,5 +1,6 @@
 'use strict';
 const Promise = require('bluebird');
+const fs = require('fs');
 const pgq = require('pg-promise')({
   promiseLib: Promise
 });
@@ -8,8 +9,7 @@ const config = {
   host: 'localhost',
   port: 5432,
   database: 'demo',
-  user: 'ingvars',
-  password: 'Gvario7335'
+  user: 'ingvars'
 };
 
 const database =  (() => {

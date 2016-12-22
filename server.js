@@ -2,7 +2,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-
 const app = express();
 
 app.use(morgan('combined'));
@@ -16,7 +15,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/info-schema', require('./info-router'));
+app.use('/api/info-schema', require('./routes/info-router'));
 
 const PORT = process.env.PORT || 3000;
 
@@ -32,7 +31,6 @@ app.get('/api', (req, res) => {
       var p = r.path.substring(1, r.path.length);
       return url + p;
     });
-
 
   res.status(200).end(JSON.stringify({ data: m }));
 });

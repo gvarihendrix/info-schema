@@ -1,7 +1,7 @@
 'use strict';
 const router = require('express').Router();
 const JSONStream = require('JSONStream');
-const info = require('./info-schema');
+const info = require('../db/info-schema');
 
 router.use((req, res, next) => {
   res.type('json');
@@ -75,6 +75,34 @@ router.get('/constraint-columns-usage-stream', (req, res) => {
     stream.pipe(JSONStream.stringify()).pipe(res);
   });
 });
+
+router.get('/foreign-keys/:table_name', (req, res) => {
+  info.findForeignKeys(req.params.table_name)
+    .then(result => {
+      return res.status(200).end(JSON.stringify(result))
+    });
+})
+
+router.get('/foreign-keys-all', (req, res) => {
+  info.tables().then(r => {
+    var f = r.map(e => {
+      var tname = `${e.table_schema}.${e.table_name}`;
+      var n = e.table_name;
+      return info.findForeignKeys(tname).then(m => {
+        return { table_name: n, [tname]: m};
+      });
+    });
+
+    return Promise.all(f); // .then(r => r.filter(e => e.length));
+  })
+  .then(b => {
+    return res.status(200).end(JSON.stringify(b));
+  });
+})
+
+function flatten(arr) {
+  return arr.reduce((acc, next) => acc.concat(next));
+}
 
 
 module.exports = router;
